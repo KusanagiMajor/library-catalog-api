@@ -17,8 +17,23 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
+    @GetMapping("/books/{id}")
+    public Book getBook(@PathVariable int id) {
+        return bookService.getBook(id);
+    }
+
     @PostMapping("/books")
     public void addBook(@Valid @RequestBody Book book) {
         bookService.addBook(book);
+    }
+
+    @PutMapping("/books/{id}")
+    public void updateBook(@PathVariable int id, @RequestBody Book book) {
+        bookService.updateBook(id, book);
+    }
+
+    @DeleteMapping("/books/{id}")
+    public void deleteBook(@PathVariable int id) {
+        bookService.deleteBook(id);
     }
 }

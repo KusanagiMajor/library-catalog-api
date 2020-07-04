@@ -1,5 +1,7 @@
 package dev.kolesnikov.librarycatalogapi.book;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -8,6 +10,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
 
     @NotBlank(message = "Author is mandatory")
@@ -19,7 +22,7 @@ public class Book {
     private Boolean isTaken;
 
     @PrePersist
-    void preInsert() { // Just showing off, I know it can be done with primitive that's "false" by default
+    void preInsert() {
         if (this.isTaken == null)
             this.isTaken = false;
     }
