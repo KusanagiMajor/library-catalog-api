@@ -19,12 +19,12 @@ public class Book {
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    private Boolean isTaken;
+    private Boolean taken;
 
     @PrePersist
     void preInsert() {
-        if (this.isTaken == null)
-            this.isTaken = false;
+        if (this.taken == null)
+            this.taken = false;
     }
 
     public Integer getId() {
@@ -52,10 +52,10 @@ public class Book {
     }
 
     public Boolean getTaken() {
-        return isTaken;
+        return taken;
     }
 
     public void setTaken(Boolean taken) {
-        isTaken = taken;
+        this.taken = taken;
     }
 }

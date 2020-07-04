@@ -1,6 +1,8 @@
 package dev.kolesnikov.librarycatalogapi.book;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,7 +30,7 @@ public class BookController {
     }
 
     @PutMapping("/books/{id}")
-    public void updateBook(@PathVariable int id, @RequestBody Book book) {
+    public void updateBook(@PathVariable int id, @Valid @RequestBody Book book) {
         bookService.updateBook(id, book);
     }
 

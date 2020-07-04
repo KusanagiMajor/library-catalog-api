@@ -16,7 +16,7 @@ public class BookService {
     }
 
     public Book getBook(int id) {
-        return repository.findById(id).orElseThrow(NoSuchElementException::new);
+        return repository.findById(id).orElseThrow(()->new NoSuchElementException("No book with id="+id+" found"));
     }
 
     public void addBook(Book book) {
@@ -24,12 +24,21 @@ public class BookService {
     }
 
     public void updateBook(int id, Book book) {
-        if(repository.existsById(id))
+        if(repository.existsById(id)) {
             book.setId(id);
-        repository.save(book);
+            repository.save(book);
+        }
+        else {
+            throw new NoSuchElementException("No book with id="+id+" found");
+        }
     }
 
     public void deleteBook(int id) {
-        repository.deleteById(id);
+        if(repository.existsById(id)) {
+            repository.deleteById(id);
+        }
+        else {
+            throw new NoSuchElementException("No book with id="+id+" found");
+        }
     }
 }
