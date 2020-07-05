@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,10 +19,11 @@ public class ApiExceptionHandler {
     // Exception handle for @Valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
-        body.put("status", "400");
-        body.put("error", "Bad Request");
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
         // Getting all errors
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
@@ -30,18 +32,32 @@ public class ApiExceptionHandler {
                 .collect(Collectors.toList());
         body.put("message", errors);
         body.put("path", request.getRequestURI());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(body, status);
     }
 
     // Exception handle for @Id mismatch
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException ex, HttpServletRequest request) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleNoSuchElementException(EntityNotFoundException ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
-        body.put("status", "404");
-        body.put("error", "Not Found");
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
         body.put("message", ex.getMessage());
         body.put("path", request.getRequestURI());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(body, status);
+    }
+
+    // Exception handle for illegal Book state
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Object> handleNoSuchElementException(IllegalStateException ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
+        body.put("message", ex.getMessage());
+        body.put("path", request.getRequestURI());
+        return new ResponseEntity<>(body, status);
     }
 }

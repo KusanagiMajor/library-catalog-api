@@ -1,9 +1,12 @@
 package dev.kolesnikov.librarycatalogapi.book;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.kolesnikov.librarycatalogapi.review.Review;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 public class Book {
@@ -11,7 +14,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Integer id;
+    private int id;
 
     @NotBlank(message = "Author is mandatory")
     private String author;
@@ -19,19 +22,14 @@ public class Book {
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    private Boolean taken;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private boolean taken = false;
 
-    @PrePersist
-    void preInsert() {
-        if (this.taken == null)
-            this.taken = false;
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -51,11 +49,11 @@ public class Book {
         this.name = name;
     }
 
-    public Boolean getTaken() {
+    public boolean isTaken() {
         return taken;
     }
 
-    public void setTaken(Boolean taken) {
+    public void setTaken(boolean taken) {
         this.taken = taken;
     }
 }

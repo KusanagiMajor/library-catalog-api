@@ -3,8 +3,8 @@ package dev.kolesnikov.librarycatalogapi.book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class BookService {
@@ -16,7 +16,25 @@ public class BookService {
     }
 
     public Book getBook(int id) {
-        return repository.findById(id).orElseThrow(()->new NoSuchElementException("No book with id="+id+" found"));
+        return repository.findById(id).orElseThrow(()->new EntityNotFoundException("No book with id="+id+" found"));
+    }
+
+    public void takeBook(int id) {
+        Book book = repository.findById(id).orElseThrow(()->new EntityNotFoundException("No book with id="+id+" found"));
+        if(book.isTaken()) {
+            throw new IllegalStateException("Book with id="+id+" is already taken");
+        }
+        book.setTaken(true);
+        repository.save(book);
+    }
+
+    public void returnBook(int id) {
+        Book book = repository.findById(id).orElseThrow(()->new EntityNotFoundException("No book with id="+id+" found"));
+        if(!book.isTaken()) {
+            throw new IllegalStateException("Book with id="+id+" is already returned");
+        }
+        book.setTaken(false);
+        repository.save(book);
     }
 
     public void addBook(Book book) {
@@ -29,7 +47,7 @@ public class BookService {
             repository.save(book);
         }
         else {
-            throw new NoSuchElementException("No book with id="+id+" found");
+            throw new EntityNotFoundException("No book with id="+id+" found");
         }
     }
 
@@ -38,7 +56,7 @@ public class BookService {
             repository.deleteById(id);
         }
         else {
-            throw new NoSuchElementException("No book with id="+id+" found");
+            throw new EntityNotFoundException("No book with id="+id+" found");
         }
     }
 }
