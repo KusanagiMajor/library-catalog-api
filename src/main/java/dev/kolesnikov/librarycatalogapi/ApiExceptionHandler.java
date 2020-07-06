@@ -1,5 +1,7 @@
 package dev.kolesnikov.librarycatalogapi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice(annotations = {RestController.class})
 public class ApiExceptionHandler {
+    Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     // Exception handle for @Valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -32,6 +35,7 @@ public class ApiExceptionHandler {
                 .collect(Collectors.toList());
         body.put("message", errors);
         body.put("path", request.getRequestURI());
+        LOG.error(body.get("message").toString());
         return new ResponseEntity<>(body, status);
     }
 
@@ -45,6 +49,7 @@ public class ApiExceptionHandler {
         body.put("error", status.getReasonPhrase());
         body.put("message", ex.getMessage());
         body.put("path", request.getRequestURI());
+        LOG.error(body.get("message").toString());
         return new ResponseEntity<>(body, status);
     }
 
@@ -58,6 +63,7 @@ public class ApiExceptionHandler {
         body.put("error", status.getReasonPhrase());
         body.put("message", ex.getMessage());
         body.put("path", request.getRequestURI());
+        LOG.error(body.get("message").toString());
         return new ResponseEntity<>(body, status);
     }
 }

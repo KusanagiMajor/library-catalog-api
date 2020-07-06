@@ -2,6 +2,8 @@ package dev.kolesnikov.librarycatalogapi.book;
 
 import dev.kolesnikov.librarycatalogapi.review.Review;
 import dev.kolesnikov.librarycatalogapi.review.ReviewService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Service
 public class BookService {
+    Logger LOG = LoggerFactory.getLogger(BookService.class);
     @Autowired
     BookRepository repository;
     @Autowired
@@ -30,6 +33,7 @@ public class BookService {
         }
         book.setTaken(true);
         repository.save(book);
+        LOG.info("Book (id="+id+") successfully taken from library");
     }
 
     public void returnBook(int id) {
@@ -39,10 +43,12 @@ public class BookService {
         }
         book.setTaken(false);
         repository.save(book);
+        LOG.info("Book (id="+id+") successfully returned library");
     }
 
     public void addBook(Book book) {
         repository.save(book);
+        LOG.info("New Book successfully added");
     }
 
     public void updateBook(int id, Book book) {
@@ -53,6 +59,7 @@ public class BookService {
         else {
             throw new EntityNotFoundException("No book with id="+id+" found");
         }
+        LOG.info("Book (id="+id+") successfully updated");
     }
 
     public void deleteBook(int id) {
@@ -66,5 +73,6 @@ public class BookService {
         else {
             throw new EntityNotFoundException("No book with id="+id+" found");
         }
+        LOG.info("Book (id="+id+") successfully deleted");
     }
 }
