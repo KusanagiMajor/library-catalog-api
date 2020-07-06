@@ -1,6 +1,6 @@
 == Library Catalog API REST Documentation
 
-Here are all methods that you can pass to http://localhost:9090:
+Here are all methods that you can pass to http://localhost:8080:
 
 include::{snippets}/test-post-book/auto-section.adoc[]
 '''
