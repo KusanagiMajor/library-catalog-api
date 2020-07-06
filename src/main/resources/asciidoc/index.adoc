@@ -1,0 +1,25 @@
+== Library Catalog API REST Documentation
+
+Here are all methods that you can pass to http://localhost:9090:
+
+include::{snippets}/test-post-book/auto-section.adoc[]
+'''
+include::{snippets}/test-update-book/auto-section.adoc[]
+'''
+include::{snippets}/test-get-all-books/auto-section.adoc[]
+'''
+include::{snippets}/test-take-book/auto-section.adoc[]
+'''
+include::{snippets}/test-return-book/auto-section.adoc[]
+'''
+include::{snippets}/test-post-review/auto-section.adoc[]
+'''
+include::{snippets}/test-update-review/auto-section.adoc[]
+'''
+include::{snippets}/test-get-all-reviews/auto-section.adoc[]
+'''
+include::{snippets}/test-delete-review/auto-section.adoc[]
+'''
+include::{snippets}/test-get-book-by-id/auto-section.adoc[]
+'''
+include::{snippets}/test-delete-book/auto-section.adoc[]

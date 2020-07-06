@@ -11,7 +11,8 @@ import javax.validation.constraints.*;
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
+    @SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
 

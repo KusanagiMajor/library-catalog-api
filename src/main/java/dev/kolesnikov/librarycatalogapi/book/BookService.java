@@ -1,5 +1,7 @@
 package dev.kolesnikov.librarycatalogapi.book;
 
+import dev.kolesnikov.librarycatalogapi.review.Review;
+import dev.kolesnikov.librarycatalogapi.review.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import java.util.List;
 public class BookService {
     @Autowired
     BookRepository repository;
+    @Autowired
+    ReviewService reviewService;
 
     public List<Book> getAllBooks() {
         return repository.findAll();
@@ -53,6 +57,10 @@ public class BookService {
 
     public void deleteBook(int id) {
         if(repository.existsById(id)) {
+            List<Review> reviews = reviewService.getAllReviews(id);
+            for(Review review : reviews) {
+                reviewService.deleteReview(review.getId());
+            }
             repository.deleteById(id);
         }
         else {

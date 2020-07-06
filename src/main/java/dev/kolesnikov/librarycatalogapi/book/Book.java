@@ -1,25 +1,26 @@
 package dev.kolesnikov.librarycatalogapi.book;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dev.kolesnikov.librarycatalogapi.review.Review;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
+    @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
 
     @NotBlank(message = "Author is mandatory")
+    @Size(max = 24, message = "Author is too long")
     private String author;
 
     @NotBlank(message = "Name is mandatory")
+    @Size(max = 64, message = "Name is too long")
     private String name;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
